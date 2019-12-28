@@ -13,6 +13,10 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
+var (
+	version string
+)
+
 func parseSyscallDuration(line string) (duration time.Duration, err error) {
 	l := strings.LastIndex(line, "<")
 	r := strings.LastIndex(line, ">")
@@ -35,6 +39,9 @@ func main() {
 	argHelp := flag.BoolP(
 		"help", "h", false, "Just print help message and exit",
 	)
+	argPrintVersion := flag.BoolP(
+		"version", "v", false, "Just print version and exit",
+	)
 	argMinDuration := flag.DurationP(
 		"duration", "d", time.Second, "Minimum syscall duration to pass the filter",
 	)
@@ -46,6 +53,10 @@ func main() {
 	}
 	if *argHelp {
 		flag.Usage()
+		return
+	}
+	if *argPrintVersion {
+		fmt.Printf("%s version %s\n", "skip-brief-syscalls", version)
 		return
 	}
 	scanner := bufio.NewScanner(os.Stdin)

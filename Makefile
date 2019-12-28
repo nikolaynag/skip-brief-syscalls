@@ -3,7 +3,9 @@ NAME=skip-brief-syscalls
 .PHONY: binary gofmt test run clean
 
 binary:
-	go build -o bin/$(NAME) this_module/main
+	go build -ldflags \
+		"-X main.version=`git describe --tags --always --dirty`" \
+		-o bin/$(NAME) this_module/main
 
 gofmt:
 	go fmt ./...
